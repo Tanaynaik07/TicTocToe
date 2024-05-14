@@ -1,7 +1,9 @@
+ 
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 100px);
-    grid-gap: 1px; /* Add gap between grid items to separate the borders */
+    /* grid-gap: 1px; Add gap between grid items to separate the borders */
 }
 
 .box {
@@ -12,6 +14,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer; /* Change cursor to pointer on hover */
+    background-color: #7e7e7e;
 }
 
 #main {
@@ -20,6 +23,7 @@
     min-height: 100vh;
     justify-content: center;
     align-items: center;   
+    background-color: grey;
 }
 
 .br-up {
@@ -41,4 +45,29 @@
 .image {
     height: 80px; /* Adjust image size */
     width: 80px; /* Adjust image size */
+}
+
+
+#rst-btn{
+    margin-top: 20px;
+    padding: 10px;
+}
+
+#rst-btn:hover{
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+#crt-text{
+   width: 300px;
+    font-size: 16px;
+}
+
+.O{
+    background-color: black;
+}
+
+.X{
+    background-color: white;
 }

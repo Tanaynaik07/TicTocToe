@@ -4,7 +4,7 @@ import oImage from '../assests/zero.png'; // Import the O image
 import "../components/main.css";
 
 const Main = () => {
-    const [winner, setWinner] = useState("");
+    const [winner, setWinner] = useState("Let the war begin!!!!!!");
     const [turn, setTurn] = useState("X");
     const [xMarks, setXMarks] = useState([]); // Array to track X's for tic-tac-toe
     const [oMarks, setOMarks] = useState([]); // Array to track O's for tic-tac-toe
@@ -87,11 +87,11 @@ const Main = () => {
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
             if (xMarks.includes(a) && xMarks.includes(b) && xMarks.includes(c)) {
-                setWinner("Winner is: X");
+                setWinner("Winner is X");
                 return "X";
             }
             if (oMarks.includes(a) && oMarks.includes(b) && oMarks.includes(c)) {
-                setWinner("Winner is: O");
+                setWinner("Winner is O");
                 return "O";
             }
         }
@@ -104,11 +104,12 @@ const Main = () => {
         setMarkCount({ X: 0, O: 0 });
         setOMarks([]);
         setXMarks([]);
-        setWinner("");
+        setWinner("Let the war begin!!!!!!");
     }
 
     return (
         <div id="main">
+            <h1>{winner}</h1>
             <div className='grid-container'>
                 {Array.from({ length: 9 }, (_, index) => {
                     const isMarkedX = xMarks.includes(index);
@@ -125,9 +126,10 @@ const Main = () => {
                     );
                 })}
             </div>
-            <h1>{winner}</h1>
-            <button onClick={restart}>Restart</button>
-            <h2>Current Turn: {`${turn === 'X' ? 'O' : 'X'}`}</h2>
+                <p id='crt-text'>Current Turn: {`${turn === 'X' ? 'O' : 'X'}`}</p>
+            
+            <button onClick={restart} id='rst-btn'>Restart</button>
+            
         </div>
     );
 }
