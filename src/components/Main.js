@@ -6,8 +6,8 @@ import "../components/main.css";
 const Main = () => {
     const [winner, setWinner] = useState("");
     const [turn, setTurn] = useState("X");
-    const [xMarks, setXMarks] = useState(Array(9).fill(false)); // Array to track X's for tic-tac-toe
-    const [oMarks, setOMarks] = useState(Array(9).fill(false)); // Array to track O's for tic-tac-toe
+    const [xMarks, setXMarks] = useState([]); // Array to track X's for tic-tac-toe
+    const [oMarks, setOMarks] = useState([]); // Array to track O's for tic-tac-toe
     const [clickPositions, setClickPositions] = useState({
         rows: [],
         cols: []
@@ -22,56 +22,53 @@ const Main = () => {
         }
     }, [xMarks, oMarks]);
 
-  const handleBoxClick = (index) => {
-    // Check if the box is already marked or if the game is over
-    if (xMarks[index] || oMarks[index] || calculateWinner(xMarks, oMarks)) {
-        return;
-    }
-
-    // Toggle between X and O
-    const nextMark = turn === "X" ? "O" : "X";
-    setTurn(nextMark);
-
-    // Update the state with the new array
-    const newXMarks = [...xMarks];
-    const newOMarks = [...oMarks];
-    if (nextMark === "X") {
-        newXMarks[index] = true;
-        setXMarks(newXMarks);
-    } else {
-        newOMarks[index] = true;
-        setOMarks(newOMarks);
-    }
-
-    // Update click positions
-    const newRow = Math.floor(index / 3) + 1; // Calculate row position (1-based index)
-    const newCol = index % 3 + 1; // Calculate column position (1-based index)
-    setClickPositions({
-        rows: [...clickPositions.rows, newRow],
-        cols: [...clickPositions.cols, newCol]
-    });
-
-    // Update mark count
-    const newMarkCount = { ...markCount };
-    newMarkCount[nextMark]++;
-    setMarkCount(newMarkCount);
-
-    // Check if the current player has made 4 marks, if so, remove the oldest mark
-    if (newMarkCount[nextMark] === 4) {
-        const marksToRemove = nextMark === "X" ? newXMarks : newOMarks;
-        const oldestMarkIndex = marksToRemove.findIndex(mark => mark === true);
-        marksToRemove[oldestMarkIndex] = false;
-        if (nextMark === "X") {
-            setXMarks(marksToRemove);
-        } else {
-            setOMarks(marksToRemove);
+    const handleBoxClick = (index) => {
+        // Check if the box is already marked or if the game is over
+        if (xMarks.includes(index) || oMarks.includes(index) || calculateWinner(xMarks, oMarks)) {
+            return;
         }
-        newMarkCount[nextMark]--;
+    
+        // Toggle between X and O
+        const nextMark = turn === "X" ? "O" : "X";
+        setTurn(nextMark);
+    
+        // Update the state with the new array
+        if (nextMark === "X") {
+            setXMarks(prevXMarks => [...prevXMarks, index]);
+        } else {
+            setOMarks(prevOMarks => [...prevOMarks, index]);
+        }
+
+
+    
+        // Update click positions
+        const newRow = Math.floor(index / 3) + 1; // Calculate row position (1-based index)
+        const newCol = index % 3 + 1; // Calculate column position (1-based index)
+        setClickPositions({
+            rows: [...clickPositions.rows, newRow],
+            cols: [...clickPositions.cols, newCol]
+        });
+    
+        // Update mark count
+        const newMarkCount = { ...markCount };
+        newMarkCount[nextMark]++;
         setMarkCount(newMarkCount);
+    
+        // Check if the current player has made 5 marks, if so, remove the oldest mark
+        if (newMarkCount[nextMark] === 4) {
+            if (nextMark === "X") {
+                setXMarks(prevXMarks => prevXMarks.slice(1));
+            } else {
+                setOMarks(prevOMarks => prevOMarks.slice(1));
+            }
+            newMarkCount[nextMark]--;
+            setMarkCount(newMarkCount);
+        }
+
+        console.log("X: "+xMarks);
+        console.log("O: "+oMarks);
     }
-}
-
-
+    
     // Helper function to calculate the winner
     const calculateWinner = (xMarks, oMarks) => {
         // Array of winning combinations
@@ -89,11 +86,11 @@ const Main = () => {
         // Check for a winner
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
-            if (xMarks[a] && xMarks[a] === xMarks[b] && xMarks[a] === xMarks[c]) {
+            if (xMarks.includes(a) && xMarks.includes(b) && xMarks.includes(c)) {
                 setWinner("Winner is: X");
                 return "X";
             }
-            if (oMarks[a] && oMarks[a] === oMarks[b] && oMarks[a] === oMarks[c]) {
+            if (oMarks.includes(a) && oMarks.includes(b) && oMarks.includes(c)) {
                 setWinner("Winner is: O");
                 return "O";
             }
@@ -103,13 +100,19 @@ const Main = () => {
         return null;
     }
 
+    const restart = () => {
+        setMarkCount({ X: 0, O: 0 });
+        setOMarks([]);
+        setXMarks([]);
+        setWinner("");
+    }
+
     return (
         <div id="main">
-            <h1>{winner}</h1>
             <div className='grid-container'>
                 {Array.from({ length: 9 }, (_, index) => {
-                    const isMarkedX = xMarks[index];
-                    const isMarkedO = oMarks[index];
+                    const isMarkedX = xMarks.includes(index);
+                    const isMarkedO = oMarks.includes(index);
                     return (
                         <div
                             key={index}
@@ -122,6 +125,9 @@ const Main = () => {
                     );
                 })}
             </div>
+            <h1>{winner}</h1>
+            <button onClick={restart}>Restart</button>
+            <h2>Current Turn: {`${turn === 'X' ? 'O' : 'X'}`}</h2>
         </div>
     );
 }
