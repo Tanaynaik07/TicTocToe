@@ -71,3 +71,9 @@
 .X{
     background-color: white;
 }
+
+p{
+    width: 300px;
+    color: white;
+    text-align: center;
+}

@@ -109,6 +109,7 @@ const Main = () => {
 
     return (
         <div id="main">
+            <p>Each player gets 3 moves at the fourth move your first move get removed and it continues!</p>
             <h1>{winner}</h1>
             <div className='grid-container'>
                 {Array.from({ length: 9 }, (_, index) => {
