@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import xImage from '../assests/cross.png'; // Import the X image
 import oImage from '../assests/zero.png'; // Import the O image
+import { Link } from 'react-router-dom';
 import "../components/main.css";
 
 const Main = () => {
-    const [winner, setWinner] = useState("Let the war begin!!!!!!");
+    const [winner, setWinner] = useState("Player1(X) V/S Player2(O)");
     const [turn, setTurn] = useState("X");
     const [xMarks, setXMarks] = useState([]); // Array to track X's for tic-tac-toe
     const [oMarks, setOMarks] = useState([]); // Array to track O's for tic-tac-toe
+    const [xWinCount,setXWinCount]=useState(0);
+    const [oWinCount,setOWinCount]=useState(0);
+    const [cond, setCond] = useState(0);
     const [clickPositions, setClickPositions] = useState({
         rows: [],
         cols: []
@@ -23,8 +27,9 @@ const Main = () => {
     }, [xMarks, oMarks]);
 
     const handleBoxClick = (index) => {
+ 
         // Check if the box is already marked or if the game is over
-        if (xMarks.includes(index) || oMarks.includes(index) || calculateWinner(xMarks, oMarks)) {
+        if ((cond===1)||xMarks.includes(index) || oMarks.includes(index) || calculateWinner(xMarks, oMarks)) {
             return;
         }
     
@@ -87,12 +92,23 @@ const Main = () => {
         for (let i = 0; i < lines.length; i++) {
             const [a, b, c] = lines[i];
             if (xMarks.includes(a) && xMarks.includes(b) && xMarks.includes(c)) {
-                setWinner("Winner is X");
-                return "X";
+                if (cond === 0) {
+                    // console.log("COnd met 1")
+                      setWinner("Winner is X");
+                      setXWinCount(xWinCount + 1);
+                      setCond(1);
+                      return "X";
+                  }
             }
             if (oMarks.includes(a) && oMarks.includes(b) && oMarks.includes(c)) {
-                setWinner("Winner is O");
-                return "O";
+                if(cond===0){
+
+                    setWinner("Winner is O");
+                    setOWinCount(oWinCount + 1);
+                    setCond(1);
+                    return "O";
+                }
+
             }
         }
 
@@ -104,13 +120,18 @@ const Main = () => {
         setMarkCount({ X: 0, O: 0 });
         setOMarks([]);
         setXMarks([]);
-        setWinner("Let the war begin!!!!!!");
+        setWinner("Player1(X) V/S Player2(O)");
+        setCond(0)
     }
 
     return (
         <div id="main">
             <p>Each player gets 3 moves at the fourth move your first move get removed and it continues!</p>
             <h1>{winner}</h1>
+            <div className='score'>
+                <p>P1:{xWinCount}</p>
+                <p>P2:{oWinCount}</p>
+            </div>
             <div className='grid-container'>
                 {Array.from({ length: 9 }, (_, index) => {
                     const isMarkedX = xMarks.includes(index);
@@ -130,6 +151,7 @@ const Main = () => {
                 <p id='crt-text'>Current Turn: {`${turn === 'X' ? 'O' : 'X'}`}</p>
             
             <button onClick={restart} id='rst-btn'>Restart</button>
+            <Link to="/single-player"><button id='player'>Switch to Single Player</button></Link>
             
         </div>
     );

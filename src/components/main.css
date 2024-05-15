@@ -62,6 +62,7 @@
 #crt-text{
    width: 300px;
     font-size: 16px;
+    color: black;
 }
 
 .O{
@@ -76,4 +77,32 @@ p{
     width: 300px;
     color: white;
     text-align: center;
+}
+
+#player{
+    padding: 10px;
+    /* background-color: blue; */
+    color: black;
+    border: none;
+    margin-top: 20px;
+}
+
+#player:hover{
+    background-color: blue;
+    cursor: pointer;
+    color: white;
+}
+
+.score{
+    display: flex;
+    font-size: 20px;
+    width: 300px;
+    justify-content: space-between;
+    
+}
+
+.score p{
+    color: black;
+    font-weight: bold;
+    width: fit-content;
 }
